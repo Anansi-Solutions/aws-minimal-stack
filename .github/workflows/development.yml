@@ -1,0 +1,46 @@
+name: Development Deployment
+
+# only allow one workflow running at a given point that deploys the development environment
+concurrency: development-deployment
+
+on:
+  push:
+    branches:
+      - __DEFAULT_BRANCH__
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
+jobs:
+  tests:
+    uses: ./.github/workflows/tests.yml
+    secrets: inherit
+
+  deploy:
+    needs: [tests]
+    uses: ./.github/workflows/deploy___PROJECT_NAME__.yml
+    with:
+      ENVIRONMENT: development
+
+      AWS_REGION: ${{ vars.DEV_AWS_REGION }}
+      ROLE_TO_ASSUME: ${{ vars.DEV_ROLE_TO_ASSUME }}
+
+      ECR_REGISTRY_URI: ${{ vars.DEV_ECR_REGISTRY_URI }}
+
+      BACKEND_CLUSTER_NAME: ${{ vars.DEV_BACKEND_CLUSTER_NAME }}
+      BACKEND_SERVICE_NAME: ${{ vars.DEV_BACKEND_SERVICE_NAME }}
+
+      DEPLOY_URL: ${{ vars.DEV_DEPLOY_URL }}
+      BACKEND_IMAGE_NAME: ${{ vars.DEV_BACKEND_IMAGE_NAME }}
+
+      FRONTEND_BUCKET_ID: ${{ vars.DEV_FRONTEND_BUCKET_ID }}
+
+      ENTRA_ID_CLIENT_ID: ${{ vars.DEV_ENTRA_ID_CLIENT_ID }}
+
+      SENTRY_RELEASE: ${{ github.sha }}
+      FRONTEND_SENTRY_DSN: ${{ vars.DEV_FRONTEND_SENTRY_DSN }}
+
+    secrets:
+      BACKEND_SENTRY_AUTH_TOKEN: ${{ secrets.DEV_BACKEND_SENTRY_AUTH_TOKEN }}
+      FRONTEND_SENTRY_AUTH_TOKEN: ${{ secrets.DEV_FRONTEND_SENTRY_AUTH_TOKEN }}

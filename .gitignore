@@ -1,0 +1,29 @@
+# OpenTofu / Terraform state files
+.terraform
+terraform.tfstate
+terraform.tfstate.*
+.terraform.tfstate.*
+
+# Taskfile cache
+.task
+
+# IDEs / Editors
+.vs
+.vscode
+.idea
+.cursor*
+*.launch
+*.sublime-workspace
+
+# dotenv environment variable files
+.env
+.env.*.local
+.env.local
+
+# temp directory
+.temp
+.tmp
+
+# misc
+.DS_Store
+*.pem

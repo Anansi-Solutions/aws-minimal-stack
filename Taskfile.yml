@@ -1,0 +1,110 @@
+version: '3'
+
+tasks:
+
+  setup:
+    desc: Setup dependencies
+    deps: [setup:tofu]
+    cmds:
+      - tflint --init --recursive
+
+  setup:tofu:
+    internal: true
+    sources:
+      - ./**/*.tf
+      - ./**/*.lock.hcl
+    generates:
+      - .terraform/**
+    cmds:
+      - tofu init
+
+  upgrade:
+    desc: Upgrade the dependencies
+    sources:
+      - ./**/*.tf
+    generates:
+      - .terraform/**
+      - ./**/*.lock.hcl
+    cmds:
+      - tofu init -upgrade
+      - |
+        tofu providers lock \
+          -platform=darwin_amd64 \
+          -platform=darwin_arm64 \
+          -platform=linux_amd64 \
+          -platform=linux_arm64 \
+          -platform=windows_amd64
+
+  format:
+    desc: Format the code
+    deps: [setup]
+    cmds:
+      - tofu fmt -recursive
+
+  lint:
+    desc: Lint the code
+    deps: [format]
+    cmds:
+      - tflint --recursive
+      - tofu validate
+
+  lint:check:
+    desc: Verify linting & formatting (CI must not leave a dirty tree after format)
+    deps: [lint]
+    cmds:
+      - git diff --quiet
+
+  docs:
+    desc: Document the modules
+    deps: [setup]
+    cmds:
+      - terraform-docs markdown table --output-file DOCS.md --recursive .
+
+  docs:check:
+    desc: Verify module docs are up to date (CI must not leave a dirty tree after docs)
+    deps: [docs]
+    cmds:
+      - git diff --quiet
+
+  ssh:dev:
+    desc: Setup an SSH tunnel to the database, on localhost:5555
+    vars:
+      REGION: __AWS_REGION__
+    cmds:
+      - task: ssh:db
+        vars:
+          DEPLOYMENT: __PROJECT_NAME__-dev
+          REGION: { ref: .REGION }
+          LOCAL_PORT: 5555
+
+  ssh:prod:
+    desc: Setup an SSH tunnel to the database, on localhost:5556
+    vars:
+      REGION: __AWS_REGION__
+    cmds:
+      - task: ssh:db
+        vars:
+          DEPLOYMENT: __PROJECT_NAME__-prod
+          REGION: { ref: .REGION }
+          LOCAL_PORT: 5556
+
+  ssh:db:
+    desc: Setup an SSH tunnel to the database, on localhost
+    internal: true
+    require:
+      vars: [DEPLOYMENT, REGION, LOCAL_PORT]
+    vars:
+      TASK_ARN:
+        sh: aws ecs list-tasks --cluster {{.DEPLOYMENT}}-backend --service {{.DEPLOYMENT}}-backend --query 'taskArns[0]' --output text
+      TASK_ID:
+        sh: python -c 'import sys; print(sys.argv[1].split("/")[-1])' "{{.TASK_ARN}}"
+      RUNTIME_ID:
+        sh: aws ecs describe-tasks --cluster {{.DEPLOYMENT}}-backend --tasks {{.TASK_ARN}} --query 'tasks[0].containers[0].runtimeId' --output text
+      ENDPOINT_DB:
+        sh: aws rds describe-db-instances --db-instance-identifier {{.DEPLOYMENT}}-database --query 'DBInstances[0].Endpoint.Address' --output text
+    cmd: |
+      aws ssm start-session \
+        --target ecs:{{.DEPLOYMENT}}-backend_{{.TASK_ID}}_{{.RUNTIME_ID}} \
+        --document-name AWS-StartPortForwardingSessionToRemoteHost \
+        --parameters '{"host": [ "{{.ENDPOINT_DB}}" ], "portNumber": [ "5432" ], "localPortNumber": [ "{{.LOCAL_PORT}}" ] }' \
+        --region {{.REGION}}

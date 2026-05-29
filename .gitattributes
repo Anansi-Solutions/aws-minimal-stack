@@ -1,0 +1,7 @@
+* text=auto
+
+# Shell scripts only work with LF endings
+*.sh text eol=lf
+
+# Mise lock always needs LF, even on Windows
+mise.lock text eol=lf
