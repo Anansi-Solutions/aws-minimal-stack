@@ -1,0 +1,8 @@
+[tools]
+task = "3.50.0"
+opentofu = "1.11.6"
+tflint = "0.62.0"
+terraform-docs = "0.24.0"
+
+[env]
+_.file = { path = '{{cwd}}/.env', tools = true }
