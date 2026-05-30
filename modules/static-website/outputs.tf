@@ -20,5 +20,5 @@ output "bucket_domain_name" {
 
 output "lambda_arn" {
   description = "Qualified ARN of the Lambda@Edge function for SPA URI rewriting."
-  value       = module.spa_lambda_function.lambda_function_qualified_arn
+  value       = try(module.spa_lambda_function.lambda_function_qualified_arn, null)
 }

@@ -1,3 +1,16 @@
+data "aws_ec2_managed_prefix_list" "cloudfront_origin_facing" {
+  name = "com.amazonaws.global.cloudfront.origin-facing"
+}
+
+resource "random_password" "origin_verify" {
+  length  = 32
+  special = false
+}
+
+locals {
+  origin_verify_header_name = "X-Origin-Verify"
+}
+
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 9.0"
@@ -8,12 +21,12 @@ module "alb" {
   vpc_id  = var.vpc_id
   subnets = var.public_subnet_ids
   security_group_ingress_rules = {
-    all_http = {
-      from_port   = 80
-      to_port     = 80
-      ip_protocol = "tcp"
-      description = "HTTP web traffic"
-      cidr_ipv4   = "0.0.0.0/0"
+    cloudfront_http = {
+      from_port      = 80
+      to_port        = 80
+      ip_protocol    = "tcp"
+      description    = "HTTP from CloudFront origin-facing addresses only"
+      prefix_list_id = data.aws_ec2_managed_prefix_list.cloudfront_origin_facing.id
     }
   }
 
@@ -24,14 +37,33 @@ module "alb" {
     }
   }
 
-
   listeners = {
     external = {
       port     = 80
       protocol = "HTTP"
 
-      forward = {
-        target_group_key = "backend"
+      fixed_response = {
+        content_type = "text/plain"
+        message_body = "Forbidden"
+        status_code  = "403"
+      }
+
+      rules = {
+        cloudfront_backend = {
+          priority = 1
+
+          actions = [{
+            type             = "forward"
+            target_group_key = "backend"
+          }]
+
+          conditions = [{
+            http_header = {
+              http_header_name = local.origin_verify_header_name
+              values           = [random_password.origin_verify.result]
+            }
+          }]
+        }
       }
     }
   }

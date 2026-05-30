@@ -25,8 +25,9 @@ module "frontend" {
   source = "./modules/static-website"
 
   # tflint-ignore: aws_s3_bucket_name
-  name   = "${var.name}-${var.environment}-frontend"
-  region = var.region
+  name        = "${var.name}-${var.environment}-frontend"
+  region      = var.region
+  environment = var.environment
 
   nodejs_lambda_function_path = "./lambdas/src/frontend/index.mjs"
   lambda_function_output_zip  = "${local.lambda_function_output_directory}/frontend.zip"
@@ -98,8 +99,9 @@ module "cdn" {
     }
   }
 
-  backend_domain_name = module.backend.dns_name
-  certificate_arn     = module.network.certificate_arn
+  backend_domain_name          = module.backend.dns_name
+  backend_origin_verify_header = module.backend.origin_verify_header
+  certificate_arn              = module.network.certificate_arn
 
   tags = local.tags
 }

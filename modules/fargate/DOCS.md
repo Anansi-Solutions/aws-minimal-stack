@@ -5,12 +5,14 @@
 | ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.75.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.1.0 |
 
 ## Providers
 
 | Name | Version |
 | ---- | ------- |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 6.42.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | >= 3.1.0 |
 
 ## Modules
 
@@ -25,7 +27,9 @@
 
 | Name | Type |
 | ---- | ---- |
+| [random_password.origin_verify](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_ec2_managed_prefix_list.cloudfront_origin_facing](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ec2_managed_prefix_list) | data source |
 
 ## Inputs
 
@@ -54,6 +58,7 @@
 | Name | Description |
 | ---- | ----------- |
 | <a name="output_dns_name"></a> [dns\_name](#output\_dns\_name) | DNS name of the application load balancer. |
+| <a name="output_origin_verify_header"></a> [origin\_verify\_header](#output\_origin\_verify\_header) | Shared secret header CloudFront must send when connecting to the ALB backend origin. |
 | <a name="output_repository_arns"></a> [repository\_arns](#output\_repository\_arns) | List of ECR repository ARNs. |
 | <a name="output_repository_url_by_image"></a> [repository\_url\_by\_image](#output\_repository\_url\_by\_image) | Map of the URLs of each ECR repository, by container image. |
 | <a name="output_service_arn"></a> [service\_arn](#output\_service\_arn) | ARN of the ECS service running the backend. |

@@ -44,7 +44,9 @@ module "database" {
   family                   = "postgres18"
   major_engine_version     = "18"
 
-  allow_major_version_upgrade = true
+  allow_major_version_upgrade = false
+
+  storage_encrypted = true
 
   auto_minor_version_upgrade = true
 

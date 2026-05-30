@@ -97,7 +97,8 @@ module "cloudfront" {
     },
     {
       backend = {
-        domain_name = var.backend_domain_name
+        domain_name   = var.backend_domain_name
+        custom_header = var.backend_origin_verify_header
         custom_origin_config = {
           http_port              = 80
           origin_protocol_policy = "http-only"

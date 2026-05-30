@@ -22,3 +22,11 @@ output "dns_name" {
   description = "DNS name of the application load balancer."
   value       = module.alb.dns_name
 }
+
+output "origin_verify_header" {
+  description = "Shared secret header CloudFront must send when connecting to the ALB backend origin."
+  value = {
+    (local.origin_verify_header_name) = random_password.origin_verify.result
+  }
+  sensitive = true
+}

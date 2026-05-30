@@ -45,3 +45,9 @@ variable "backend_domain_name" {
   type        = string
   description = "Origin domain name for the API/backend load balancer."
 }
+
+variable "backend_origin_verify_header" {
+  type        = map(string)
+  description = "Custom header CloudFront sends to the ALB so only edge traffic is forwarded to the backend."
+  sensitive   = true
+}
