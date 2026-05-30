@@ -32,6 +32,7 @@
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_environment"></a> [environment](#input\_environment) | Deployment environment (dev or prod). | `string` | n/a | yes |
 | <a name="input_lambda_function_output_zip"></a> [lambda\_function\_output\_zip](#input\_lambda\_function\_output\_zip) | Output path for the zipped Lambda@Edge deployment package. | `string` | `""` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name prefix for the S3 bucket and related static-site resources. | `string` | n/a | yes |
 | <a name="input_nodejs_lambda_function_path"></a> [nodejs\_lambda\_function\_path](#input\_nodejs\_lambda\_function\_path) | Path to the Node.js source file used as a Lambda@Edge handler to rewrite request URIs (SPA routing). | `string` | `""` | no |

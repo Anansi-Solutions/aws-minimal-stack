@@ -4,8 +4,8 @@
 resource "aws_s3_bucket" "this" {
   bucket = var.name
 
-  # delete all objects in the bucket when destroying the bucket
-  force_destroy = true
+  # Allow wiping the bucket on destroy in dev only (mirrors RDS skip_final_snapshot).
+  force_destroy = var.environment == "dev"
 
   tags = var.tags
 }

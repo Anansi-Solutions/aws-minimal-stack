@@ -3,6 +3,16 @@ variable "name" {
   description = "Name prefix for the S3 bucket and related static-site resources."
 }
 
+variable "environment" {
+  type        = string
+  description = "Deployment environment (dev or prod)."
+
+  validation {
+    condition     = contains(["dev", "prod"], var.environment)
+    error_message = "The environment can only be defined as 'dev' or 'prod'"
+  }
+}
+
 variable "tags" {
   type        = map(string)
   description = "Tags applied to static website resources."
