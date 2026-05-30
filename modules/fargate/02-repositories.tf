@@ -5,7 +5,7 @@ module "ecr_backend" {
   version = "~> 3.2"
 
   repository_name                 = "${var.name}/${each.key}"
-  repository_image_tag_mutability = "MUTABLE"
+  repository_image_tag_mutability = "IMMUTABLE"
 
   repository_read_write_access_arns = [data.aws_caller_identity.current.arn]
 

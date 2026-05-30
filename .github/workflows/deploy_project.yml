@@ -133,11 +133,12 @@ jobs:
           BACKEND_IMAGE_NAME: ${{ inputs.BACKEND_IMAGE_NAME }}
 
       - name: Tag docker image
-        run: docker tag $BACKEND_IMAGE_NAME:latest $ECR_REGISTRY_URI:latest
+        run: docker tag $BACKEND_IMAGE_NAME:latest $ECR_REGISTRY_URI:$IMAGE_TAG
         working-directory: ./backend
         env:
           BACKEND_IMAGE_NAME: ${{ inputs.BACKEND_IMAGE_NAME }}
           ECR_REGISTRY_URI: ${{ inputs.ECR_REGISTRY_URI }}
+          IMAGE_TAG: ${{ inputs.SENTRY_RELEASE }}
 
       # Actual deployment
 
@@ -148,10 +149,11 @@ jobs:
           REGISTRY: ${{ inputs.ECR_REGISTRY_URI }}
 
       - name: Upload docker image
-        run: docker push $REGISTRY:latest
+        run: docker push $REGISTRY:$IMAGE_TAG
         working-directory: ./backend
         env:
           REGISTRY: ${{ inputs.ECR_REGISTRY_URI }}
+          IMAGE_TAG: ${{ inputs.SENTRY_RELEASE }}
 
       - name: Deploy frontend to S3
         run: aws s3 sync ./frontend/dist/ s3://$BUCKET/ --delete
@@ -159,7 +161,16 @@ jobs:
           BUCKET: ${{ inputs.FRONTEND_BUCKET_ID }}
 
       - name: Deploy new docker image
-        run: aws ecs update-service --cluster $CLUSTER --service $SERVICE --force-new-deployment
         env:
           CLUSTER: ${{ inputs.BACKEND_CLUSTER_NAME }}
           SERVICE: ${{ inputs.BACKEND_SERVICE_NAME }}
+          REGISTRY: ${{ inputs.ECR_REGISTRY_URI }}
+          IMAGE_TAG: ${{ inputs.SENTRY_RELEASE }}
+        run: |
+          IMAGE="${REGISTRY}:${IMAGE_TAG}"
+          TASK_DEF_ARN=$(aws ecs describe-services --cluster "$CLUSTER" --services "$SERVICE" --query 'services[0].taskDefinition' --output text)
+          aws ecs describe-task-definition --task-definition "$TASK_DEF_ARN" --query 'taskDefinition' \
+            | jq --arg IMAGE "$IMAGE" 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy) | .containerDefinitions[0].image = $IMAGE' \
+            > new-task-def.json
+          NEW_TASK_DEF=$(aws ecs register-task-definition --cli-input-json file://new-task-def.json --query 'taskDefinition.taskDefinitionArn' --output text)
+          aws ecs update-service --cluster "$CLUSTER" --service "$SERVICE" --task-definition "$NEW_TASK_DEF"
