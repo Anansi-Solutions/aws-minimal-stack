@@ -45,22 +45,27 @@ You should remove all `# tflint-ignore:` lines before usage.
    Please setup the role with a policy that only has the necessary privileges.
    `SystemAdministrator` should not be used past initial prototyping stages, and only in a dedicated tenant.
 
-4. Follow the instructions [here](https://docs.scalr.io/docs/custom-providers)
-   and [here](https://docs.scalr.io/docs/github) to setup the GitHub<=>Scalr integration,
-   both as a Terraform provider and as a VCS provider.
-   > ⚠ **_WARNING:_** The Terraform provider for GitHub should have type as `integrations/github`,
-   as the default `GitHub` provider may lead to the following run error:
+4. Follow the instructions [here](https://docs.scalr.io/docs/github)
+   to setup the GitHub<=>Scalr integration as a VCS provider.
+
+5. Create a custom GitHub Application within your GitHub organization,
+   with write permissions on GitHub Action Variables and Secrets,
+   install it in your Organization and give it permissions on your
+   software repository (not the infrastructure one),
+   then configure the `github_*` variables in Scalr.
+   > ⚠ **_WARNING:_** The Terraform provider for GitHub does not need to configured.
+   If the default `GitHub` provider is setup on Scalr, this may lead to the following run error:
    > > │ Error: Inconsistent dependency lock file  
    > > │  
    > > │ The following dependency selections recorded in the lock file are  
    > > │ inconsistent with the current configuration:  
    > > │   - provider registry.opentofu.org/hashicorp/github: required by this configuration but no version is selected
 
+6. Configure any remaining variables in the Scalr workspace, then run it
 
-5. tofu apply
-
-6. Obtain any further API keys you may need and configure the GitHub action variable/secrets
+7. Obtain any further API keys you may need and configure the GitHub action variable/secrets
    accordingly in the GitHub repository
+
 
 ## Maintenance and Operations
 
