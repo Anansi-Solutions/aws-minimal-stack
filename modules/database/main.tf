@@ -120,8 +120,9 @@ resource "aws_secretsmanager_secret" "database_url" {
 }
 
 resource "aws_secretsmanager_secret_version" "database_url" {
-  secret_id     = aws_secretsmanager_secret.database_url.id
-  secret_string = local.database_url
+  secret_id                = aws_secretsmanager_secret.database_url.id
+  secret_string_wo         = local.database_url
+  secret_string_wo_version = 1
 }
 
 resource "aws_secretsmanager_secret" "database_pwd" {
@@ -131,6 +132,7 @@ resource "aws_secretsmanager_secret" "database_pwd" {
 }
 
 resource "aws_secretsmanager_secret_version" "database_pwd" {
-  secret_id     = aws_secretsmanager_secret.database_pwd.id
-  secret_string = random_password.database.result
+  secret_id                = aws_secretsmanager_secret.database_pwd.id
+  secret_string_wo         = random_password.database.result
+  secret_string_wo_version = 1
 }
