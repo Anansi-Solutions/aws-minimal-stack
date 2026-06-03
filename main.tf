@@ -140,8 +140,8 @@ module "github_access" {
   }
 
   github_secrets = toset([
-    "BACKEND_SENTRY_AUTH_TOKEN",
-    "FRONTEND_SENTRY_AUTH_TOKEN",
+    "SENTRY_AUTH_TOKEN",
+    "SONAR_TOKEN"
   ])
 
   tags = local.tags
