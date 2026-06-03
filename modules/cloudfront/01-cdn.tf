@@ -47,6 +47,8 @@ locals {
   default_site_key = one([for k, v in var.static_sites : k if v.path_pattern == null])
   default_site     = var.static_sites[local.default_site_key]
   ordered_sites    = { for k, v in var.static_sites : k => v if v.path_pattern != null }
+
+  s3_oac_key = "${var.name}-s3oac"
 }
 
 module "cloudfront" {
@@ -73,7 +75,7 @@ module "cloudfront" {
 
   origin_access_control = {
     # we need to allow cloudfront to access S3 buckets
-    s3_oac = {
+    (local.s3_oac_key) = {
       description      = "CloudFront S3 Origin Access Control"
       origin_type      = "s3"
       signing_behavior = "always"
@@ -92,7 +94,7 @@ module "cloudfront" {
       for k, v in var.static_sites :
       k => {
         domain_name               = v.domain_name
-        origin_access_control_key = "s3_oac" # key in `origin_access_control` map
+        origin_access_control_key = local.s3_oac_key # key in `origin_access_control` map
       }
     },
     {
