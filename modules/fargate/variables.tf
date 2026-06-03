@@ -5,7 +5,13 @@ variable "name" {
 
 variable "environment" {
   type        = string
+  default     = "dev"
   description = "Deployment environment (dev or prod)."
+
+  validation {
+    condition     = contains(["dev", "prod"], var.environment)
+    error_message = "The environment can only be defined as 'dev' or 'prod'"
+  }
 }
 
 variable "domain_name" {

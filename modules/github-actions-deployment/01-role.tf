@@ -44,7 +44,7 @@ data "aws_iam_policy_document" "oidc" {
       test = "StringLike"
       # allow one repo within the organization to assume the role
       # but allow all branches - replace the * with a branch name if needed
-      values   = ["repo:${var.github_account_name}/${var.github_repo_name}:*"]
+      values   = ["repo:${var.github_account_name}/${var.github_repo_name}:${var.environment == "prod" ? "production" : "main"}"]
       variable = "token.actions.githubusercontent.com:sub"
     }
   }
