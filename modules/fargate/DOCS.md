@@ -39,7 +39,7 @@
 | <a name="input_database_connection_info"></a> [database\_connection\_info](#input\_database\_connection\_info) | The connection information to the database | <pre>object({<br/>    host         = string<br/>    port         = number<br/>    user         = string<br/>    password_arn = string<br/>    name         = string<br/>    url_arn      = string<br/>  })</pre> | n/a | yes |
 | <a name="input_discovery_service_arn"></a> [discovery\_service\_arn](#input\_discovery\_service\_arn) | ARN of the Cloud Map service for ECS service discovery. | `string` | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Public DNS domain name for the backend load balancer. | `string` | n/a | yes |
-| <a name="input_environment"></a> [environment](#input\_environment) | Deployment environment (dev or prod). | `string` | n/a | yes |
+| <a name="input_environment"></a> [environment](#input\_environment) | Deployment environment (dev or prod). | `string` | `"dev"` | no |
 | <a name="input_health_check_grace_period_seconds"></a> [health\_check\_grace\_period\_seconds](#input\_health\_check\_grace\_period\_seconds) | Seconds the ECS service ignores ALB health check failures after a task starts, giving the backend time to boot before unhealthy tasks are replaced. Default set to one hour due to potentially long startup time due to migrations. | `number` | `60` | no |
 | <a name="input_health_check_uri_path"></a> [health\_check\_uri\_path](#input\_health\_check\_uri\_path) | The URI of the health check endpoint on the backend, e.g. `/api/health` | `string` | `"/api"` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name prefix for Fargate resources (cluster, service, load balancer). | `string` | n/a | yes |

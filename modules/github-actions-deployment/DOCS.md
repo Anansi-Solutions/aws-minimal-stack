@@ -26,8 +26,8 @@ No modules.
 | [aws_iam_role.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.attach_deploy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [github_actions_secret.placeholders](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
-| [github_actions_variable.placeholders](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
-| [github_actions_variable.this](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
+| [github_actions_variable.aws_role](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
+| [github_actions_variable.configured](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.deploy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.oidc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -41,6 +41,9 @@ No modules.
 | <a name="input_environment"></a> [environment](#input\_environment) | Deployment environment (dev or prod). | `string` | `"dev"` | no |
 | <a name="input_github_account_name"></a> [github\_account\_name](#input\_github\_account\_name) | GitHub organization or user name that owns the repository. | `string` | n/a | yes |
 | <a name="input_github_action_oidc_provider_domain"></a> [github\_action\_oidc\_provider\_domain](#input\_github\_action\_oidc\_provider\_domain) | OIDC issuer domain for GitHub Actions workload identity. | `string` | `"token.actions.githubusercontent.com"` | no |
+| <a name="input_github_app_id"></a> [github\_app\_id](#input\_github\_app\_id) | GitHub App ID, used for authentication. | `string` | n/a | yes |
+| <a name="input_github_app_installation_id"></a> [github\_app\_installation\_id](#input\_github\_app\_installation\_id) | GitHub App Installation ID, used for authentication. | `string` | n/a | yes |
+| <a name="input_github_app_pem_file"></a> [github\_app\_pem\_file](#input\_github\_app\_pem\_file) | GitHub App PEM file (private RSA key), used for authentication. | `string` | n/a | yes |
 | <a name="input_github_repo_name"></a> [github\_repo\_name](#input\_github\_repo\_name) | GitHub repository name allowed to assume the deployment role. | `string` | n/a | yes |
 | <a name="input_github_secrets"></a> [github\_secrets](#input\_github\_secrets) | Repository-level GitHub Actions secrets provisioned for this environment. Keys are auto-prefixed with the environment (e.g. DEV\_MY\_SECRET). Values are created as 'replace-me' placeholders and then left untouched. | `set(string)` | n/a | yes |
 | <a name="input_github_variables"></a> [github\_variables](#input\_github\_variables) | Repository-level GitHub Actions variables provisioned for this environment. Keys are auto-prefixed with the environment (e.g. DEV\_AWS\_REGION). Empty/null values are created as 'replace-me' placeholders and then left untouched. | `map(string)` | n/a | yes |

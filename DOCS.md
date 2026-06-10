@@ -29,9 +29,16 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_database_storage_in_gb"></a> [database\_storage\_in\_gb](#input\_database\_storage\_in\_gb) | Size of the database to be allocated. | `number` | n/a | yes |
+| <a name="input_database_storage_margin_in_gb"></a> [database\_storage\_margin\_in\_gb](#input\_database\_storage\_margin\_in\_gb) | Extra space to allow for database growth. | `number` | `5` | no |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Public DNS domain name for the application. | `string` | n/a | yes |
 | <a name="input_entra_id_client_id"></a> [entra\_id\_client\_id](#input\_entra\_id\_client\_id) | Microsoft Entra ID application (client) ID for OIDC authentication. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Deployment environment (dev or prod). | `string` | `"dev"` | no |
+| <a name="input_github_account_name"></a> [github\_account\_name](#input\_github\_account\_name) | GitHub organization or user name that owns the repository. | `string` | n/a | yes |
+| <a name="input_github_app_id"></a> [github\_app\_id](#input\_github\_app\_id) | GitHub App ID, used for authentication. | `string` | n/a | yes |
+| <a name="input_github_app_installation_id"></a> [github\_app\_installation\_id](#input\_github\_app\_installation\_id) | GitHub App Installation ID, used for authentication. | `string` | n/a | yes |
+| <a name="input_github_app_pem_file"></a> [github\_app\_pem\_file](#input\_github\_app\_pem\_file) | GitHub App PEM file (private RSA key), used for authentication. | `string` | n/a | yes |
+| <a name="input_github_repo_name"></a> [github\_repo\_name](#input\_github\_repo\_name) | GitHub repository name allowed to assume the deployment role. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Application name used as a prefix for resource naming. | `string` | `"__PROJECT_NAME__"` | no |
 | <a name="input_region"></a> [region](#input\_region) | AWS region where infrastructure is deployed. | `string` | n/a | yes |
 | <a name="input_sentry_dsn_backend"></a> [sentry\_dsn\_backend](#input\_sentry\_dsn\_backend) | Sentry DSN for the backend service. | `string` | n/a | yes |

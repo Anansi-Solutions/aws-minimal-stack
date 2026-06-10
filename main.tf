@@ -46,6 +46,9 @@ module "database" {
   database_subnet_group_name  = module.network.database_subnet_group_name
   private_subnets_cidr_blocks = module.network.private_subnets_cidr_blocks
 
+  database_storage_in_gb        = var.database_storage_in_gb
+  database_storage_margin_in_gb = var.database_storage_margin_in_gb
+
   tags = local.tags
 }
 

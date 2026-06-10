@@ -71,6 +71,27 @@ variable "vpc_cidr" {
   description = "CIDR block for the VPC."
 }
 
+variable "database_storage_in_gb" {
+  type        = number
+  description = "Size of the database to be allocated."
+
+  validation {
+    condition     = var.database_storage_in_gb >= 20
+    error_message = "The database needs to be at least 20GB large."
+  }
+}
+
+variable "database_storage_margin_in_gb" {
+  type        = number
+  description = "Extra space to allow for database growth."
+  default     = 5
+
+  validation {
+    condition     = var.database_storage_margin_in_gb >= 0
+    error_message = "The database margin can't be negative."
+  }
+}
+
 variable "tags" {
   type = map(string)
   default = {

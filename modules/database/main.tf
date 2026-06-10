@@ -54,8 +54,8 @@ module "database" {
 
   # DB instance storage - will be increased when needed
   storage_type          = "gp3"
-  allocated_storage     = 5
-  max_allocated_storage = 10
+  allocated_storage     = var.database_storage_in_gb
+  max_allocated_storage = var.database_storage_in_gb + var.database_storage_margin_in_gb
 
   db_name  = local.database_name
   username = local.database_user

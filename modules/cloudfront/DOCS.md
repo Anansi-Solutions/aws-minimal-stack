@@ -37,7 +37,7 @@
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_backend_domain_name"></a> [backend\_domain\_name](#input\_backend\_domain\_name) | Origin domain name for the API/backend load balancer. | `string` | n/a | yes |
-| <a name="input_backend_origin_verify_header"></a> [backend\_origin\_verify\_header](#input\_backend\_origin\_verify\_header) | Custom header CloudFront sends to the ALB so only edge traffic is forwarded to the backend. | <pre>object({<br/>    name  = string<br/>    value = string<br/>  })</pre> | n/a | yes |
+| <a name="input_backend_origin_verify_header"></a> [backend\_origin\_verify\_header](#input\_backend\_origin\_verify\_header) | Custom header CloudFront sends to the ALB so only edge traffic is forwarded to the backend. | `map(string)` | n/a | yes |
 | <a name="input_certificate_arn"></a> [certificate\_arn](#input\_certificate\_arn) | ARN of the ACM certificate for HTTPS on the distribution. | `string` | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Alternate domain name (CNAME) for the CloudFront distribution. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name prefix for the CloudFront distribution and related resources. | `string` | n/a | yes |

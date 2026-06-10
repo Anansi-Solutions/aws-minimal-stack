@@ -35,6 +35,8 @@
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_database_storage_in_gb"></a> [database\_storage\_in\_gb](#input\_database\_storage\_in\_gb) | Size of the database to be allocated. | `number` | n/a | yes |
+| <a name="input_database_storage_margin_in_gb"></a> [database\_storage\_margin\_in\_gb](#input\_database\_storage\_margin\_in\_gb) | Extra space to allow for database growth. | `number` | `5` | no |
 | <a name="input_database_subnet_group_name"></a> [database\_subnet\_group\_name](#input\_database\_subnet\_group\_name) | Name of the DB subnet group for RDS placement. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Deployment environment (dev or prod). | `string` | `"dev"` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name prefix for the RDS instance and related resources. | `string` | n/a | yes |
